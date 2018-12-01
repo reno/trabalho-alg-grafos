@@ -1,4 +1,4 @@
-###exemplos de uso:
+### exemplos de uso:
 
 `python3 main.py arquivo `
 
