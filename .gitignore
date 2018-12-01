@@ -1,4 +1,7 @@
 *.jpg
 *.txt
+.DS_Store
+.gitattributes
+
 !/Instancias/*.txt
 !/Instancias/*.jpg
