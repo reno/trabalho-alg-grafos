@@ -3,5 +3,4 @@
 .DS_Store
 .gitattributes
 
-!/Instancias/*.txt
-!/Instancias/*.jpg
+!/Instancias/
