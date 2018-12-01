@@ -39,7 +39,6 @@ def calcula_raio(G, centro, regiao):
 
 def esta_contido(G, v, centro, regiao):
     """Retorna True se o vértice v está dentro do alcance do raio da região."""
-    print(type(centro)) # centro = vertice ou int?
     distancias_regiao = set(regiao.values()) - {regiao[centro]}
     raio = mean(distancias_regiao)
     distancia_vc = calcula_distancia(G, v, centro)
@@ -117,8 +116,7 @@ def kcluster(G, k):
         desvios[r] = stdev((demanda_ideal, demanda))
     #pprint(demanda_regiao)
     #pprint(desvios)
-
-    #print(max(desvios, key=desvios.get)) # ou sum
+    #print(max(desvios.values()))
     
     # escreve as regiões definitivas nos vértices (para plotar)
     for r in range(k):
