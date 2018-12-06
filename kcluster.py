@@ -66,7 +66,7 @@ def kcluster(G, k):
     características do problema proposto.
 
     Divide inicialmente os vértices conforme a distância entre os centros.
-    Melhora solução considerando a distância para o centro e a demanda
+    Melhora a solução considerando a distância para o centro e a demanda
     por região.
 
     args:
@@ -80,7 +80,7 @@ def kcluster(G, k):
     """
 
     # inicializa as regiões
-    matriz_distancias = [] # distância entre cada vértice e os todos os centros
+    matriz_distancias = []  # distância entre cada vértice e os todos os centros
     regioes = []
     for centro in range(k):
         regioes.append({centro:0})
@@ -97,10 +97,10 @@ def kcluster(G, k):
     #pprint(matriz_distancias)
     #pprint(regioes)
 
-    # cria dicionario em ordem decrescente de distancia (teste)
-    regioes_ordenado = []
+    # lista de dicts com v em ordem decrescente de distancia (teste)
+    regioes_ordenadas = []
     for r in range(k):
-        regioes_ordenado.append(OrderedDict(sorted(regioes[r].items(),
+        regioes_ordenadas.append(OrderedDict(sorted(regioes[r].items(),
                                                    key=itemgetter(1),
                                                    reverse=True)))
     #pprint(regioes_ordenado)
@@ -108,7 +108,7 @@ def kcluster(G, k):
     # calcula demandas das regiões (e os desvios para a demanda ideal)
     demanda_ideal = calcula_demanda(G, k)
     demanda_regiao = {}
-    desvios = {} # para debug, não precisa ser armazenado na versão final
+    desvios = {} 
     for r in range(k):
         Gr = G.subgraph(regioes[r].keys())
         demanda = calcula_demanda(Gr)
@@ -117,6 +117,18 @@ def kcluster(G, k):
     #pprint(demanda_regiao)
     #pprint(desvios)
     #print(max(desvios.values()))
+
+    G_adj = arvore_adjacencia(G, k)
+
+    '''
+    #while soma_desvios > x:
+        menor_regiao = min(sorted(regioes, key=len))
+        r = min(regiao.keys())
+        # doador = regiao com maior numero de vertices e que seja vizinha da menor_regiao,
+                   ou 2a maior, 2a vizinha, etc
+        # enquanto demanda menor_regiao < demanda ideal:
+            # troca v de doador para menor_regiao
+    '''
     
     # escreve as regiões definitivas nos vértices (para plotar)
     for r in range(k):

@@ -5,3 +5,4 @@
 
 !/Instancias/**
 /Instancias/.DS_Store
+__pycache__/
