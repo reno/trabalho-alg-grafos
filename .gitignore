@@ -1,8 +1,5 @@
-*.jpg
-*.txt
 .DS_Store
 .gitattributes
 
-!/Instancias/**
 /Instancias/.DS_Store
 __pycache__/
