@@ -43,14 +43,12 @@ def main():
             p, n = [int(valor) for valor in dados_cliente[3:]]
             G.add_node(i, x=x, y=y, volume=v, valor=p, quantidade=n)
 
-
-    # chamadas de função aqui :)
-    regioes = kcluster(G, numero_regioes)
-    G_adj = arvore_adjacencia(G, numero_regioes)
-
-
+    # divide G em regiões
+    kcluster(G, numero_regioes)
+    #print(G.nodes.data())
+    
     # desenho do grafo:
-    tamanho_imagem = (5,5) # deve ter proporção 1:1
+    tamanho_imagem = (5, 5)  # em polegadas, deve ter proporção 1:1
     resolucao = 150
     plt.figure(figsize=tamanho_imagem, dpi=resolucao)
     # gera dicionario com tupla de coordenadas para cada vértice
@@ -58,28 +56,13 @@ def main():
     for v in G.nodes():
         posicao[v] = tuple(G.nodes.data()[v][k] for k in ('x', 'y'))
     # gera lista de cores de acordo com a região dos vértices
-    cores = ('c', 'm', 'y', 'r', 'g')
+    cores = ('c', 'm', 'y', 'r', 'g', '#767b7e')
     lista_cores = [cores[G.nodes.data()[v]['regiao']] if v > 4
                    else 'k' for v in G.nodes()]
-    # desenho de G        
+    # desenho de G
     nx.draw(G, pos=posicao, with_labels=True, font_size=8, font_color='w',
             font_weight='bold', node_size=100, node_color=lista_cores)
-    # desenho de G_adj
-    nx.draw(G_adj, pos=posicao, with_labels=True, font_size=8, font_color='w',
-            font_weight='bold', node_size=100, node_color=lista_cores)
-    # calcula circulos representando regiões
-    circulos = {'centros':[], 'diametros':[]}
-    for n, regiao in enumerate(regioes):
-        #print(regiao)
-        diametro = 2 * calcula_raio(G, n, regiao) * tamanho_imagem[0] * resolucao
-        circulos['diametros'].append(diametro)
-        centro = tuple(G.nodes.data()[n][k] for k in ('x', 'y'))
-        circulos['centros'].append(centro)
-    regioes = [k for k in range(numero_regioes)]
-    # desenha circulos
-    nx.draw(G, nodelist=regioes, pos=circulos['centros'],
-            node_size=circulos['diametros'], node_color=cores, alpha=0.2)
-    # salva imagem
+    # salva imagem com mesmo nome do arquivo de entrada
     plt.savefig('{}.jpg'.format(arg.arquivo[:-4]))
 
 
