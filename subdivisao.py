@@ -31,7 +31,7 @@ def calcula_distancia(G, u, v, x='x', y='y'):
                 (G.nodes[u][y] - G.nodes[v][y])**2)
 
 
-def kcluster(G, k, tolerancia=1):
+def divide_regioes(G, k, tolerancia=1):
     """Heurística ...
     Faz distribuição inicial dos vértices de maneira uniforme entre as
     regiões.
@@ -76,7 +76,7 @@ def kcluster(G, k, tolerancia=1):
                 nao_alocados -= {v}
                 #print('não alocados =', nao_alocados)
         i += 1
-    print(i, 'iteracoes')
+    #print(i, 'iteracoes')
 
     demanda_regioes = {r: 0 for r in range(k)}
     demanda_ideal = calcula_demanda(G, k)
@@ -87,10 +87,10 @@ def kcluster(G, k, tolerancia=1):
         demanda_regioes[r] = calcula_demanda(Gr)
         desvios[r] = stdev([demanda_ideal, demanda_regioes[r]])
 
-    print('soma desvios =', sum(desvios))
-    print('desvios =', desvios)
-    print('demanda ideal:', demanda_ideal)   
-    print('demandas =', demanda_regioes)
+    #print('soma desvios =', sum(desvios))
+    #print('desvios =', desvios)
+    #print('demanda ideal:', demanda_ideal)   
+    #print('demandas =', demanda_regioes)
 
     #print(lista_regioes)
 
@@ -106,5 +106,5 @@ def kcluster(G, k, tolerancia=1):
         for v in lista_regioes[r]:
             G.nodes()[v]['regiao'] = r
 
-    #return lista_regioes
+    return lista_regioes
 
