@@ -14,7 +14,6 @@ from pprint import pprint
 from argparse import ArgumentParser
 from subdivisao import *
 from roteirizacao import *
-from roteirizacao import Veiculo
 
 def main():
     # Processa argumentos fornecidos na execução
@@ -57,6 +56,8 @@ def main():
     # divide G em regiões
     kcluster(G, numero_regioes)
     #print(G.nodes.data())
+    custos = [veiculos[tipo].custo_dia() for tipo in veiculos.keys()]
+    print('custos', custos)
     
     # desenho do grafo:
     tamanho_imagem = (5, 5)  # em polegadas, deve ter proporção 1:1
