@@ -12,7 +12,9 @@ from networkx import MultiGraph
 import matplotlib.pyplot as plt
 from pprint import pprint
 from argparse import ArgumentParser
-from kcluster import *
+from subdivisao import *
+from roteirizacao import *
+from roteirizacao import Veiculo
 
 def main():
     # Processa argumentos fornecidos na execução
@@ -42,6 +44,15 @@ def main():
             x, y, v = [float(valor) for valor in dados_cliente[:3]]
             p, n = [int(valor) for valor in dados_cliente[3:]]
             G.add_node(i, x=x, y=y, volume=v, valor=p, quantidade=n)
+        veiculos = {}
+        for tipo in ('van', 'minivan', 'carro', 'moto', 'terceirizado'):
+            veiculo = arquivo.readline()
+            dados_veiculo = veiculo.split()
+            V = float(dados_veiculo[0])
+            P, Nv, vf, vd = [int(valor) for valor in dados_veiculo[1:5]] 
+            tc, td = [float(valor) for valor in dados_veiculo[5:7]]
+            ph, pkm, pf = [int(valor) for valor in dados_veiculo[7:]]
+            veiculos[tipo] = Veiculo(V, P, Nv, vf, vd, tc, td, ph, pkm, pf)
 
     # divide G em regiões
     kcluster(G, numero_regioes)
