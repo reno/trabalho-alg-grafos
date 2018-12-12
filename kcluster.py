@@ -30,7 +30,7 @@ def calcula_distancia(G, u, v, x='x', y='y'):
                 (G.nodes[u][y] - G.nodes[v][y])**2)
 
 
-def kcluster(G, k, tolerancia=0.5):
+def kcluster(G, k, tolerancia=1):
     """Heurística ...
 
     args:
@@ -53,11 +53,7 @@ def kcluster(G, k, tolerancia=0.5):
             distancia = calcula_distancia(G, centro, v)
             distancias.append(distancia)
         matriz_distancias[v] = distancias
-    # calcula demandas
-    demanda_regioes = {r: 0 for r in range(k)}
-    demanda_ideal = calcula_demanda(G, k)
-    print('demanda ideal:', demanda_ideal)     
-    # inicializa matriz com v em ordem de proximidade para cada regiao
+    # faz uma copia da matriz_distancias ordenada para cada regiao
     vertices_proximos = []   
     vertices_proximos += [sorted(matriz_distancias.items(),
                           key=lambda v: v[1][r]) for r in range(k)]
@@ -65,66 +61,86 @@ def kcluster(G, k, tolerancia=0.5):
     nao_alocados = {v for v in G.nodes() if v >= k}
     # inicializa outras variaveis
     i = 0
-    desvios = [0 for r in range(k)]
+
     # adiciona v nao alocados as regioes de forma alternada
     while nao_alocados: #and i < G.order():
         for r in range(k):
-            #if demanda_regioes[r] < demanda_ideal:
-                print('demanda da regiao', r, '=', demanda_regioes[r])
-                # escolhe o i-esimo vertice mais próximo do centro de r
-                v = vertices_proximos[r][i][0]
-                if v in nao_alocados:
-                    # adiciona v a regiao r e recalcula a demanda da regiao
-                    lista_regioes[r][v] = vertices_proximos[r][i][1][r]
-                    nao_alocados -= {v}
-                    print('não alocados =', nao_alocados)
-                    Gr = G.subgraph(lista_regioes[r].keys())
-                    demanda_regioes[r] = calcula_demanda(Gr)
-                    # atualiza os desvios
-                    desvios[r] = stdev([demanda_ideal, demanda_regioes[r]])
+            # escolhe o i-esimo vertice mais próximo do centro de r
+            v = vertices_proximos[r][i][0]
+            if v in nao_alocados:
+                # adiciona v a regiao r 
+                lista_regioes[r][v] = vertices_proximos[r][i][1][r]
+                nao_alocados -= {v}
+                #print('não alocados =', nao_alocados)
         i += 1
-        print('soma desvios =', sum(desvios))
-        #print('soma desvios anteriores =', sum(desvios_anteriores))
-    print('desvios:', desvios)
     print(i, 'iteracoes')
 
-    '''
-    # garante que todos vertices foram alocados
-    # apenas se loop não alocar todos os vertices
-    # necessário alterar linha 136 para range(k+1)
-    vertices_alocados = []
-    vertices_alocados = [v for regiao in lista_regioes for v in regiao]
-    for v in G.nodes():
-        if v not in vertices_alocados:
-            if len(lista_regioes) == k:
-                lista_regioes.append ({v: float('inf')})
-            lista_regioes[k][v] = float('inf')
-            #print(v)
-            #menor_distancia = min(matriz_distancias[v])
-            #r = matriz_distancias[v].index(menor_distancia)
-            #lista_regioes[r][v] = menor_distancia
-    #pprint(lista_regioes)
-    '''
+    demanda_regioes = {r: 0 for r in range(k)}
+    demanda_ideal = calcula_demanda(G, k)
+    desvios = [0 for r in range(k)]
 
+    for r in range(k):
+        Gr = G.subgraph(lista_regioes[r].keys())
+        demanda_regioes[r] = calcula_demanda(Gr)
+        desvios[r] = stdev([demanda_ideal, demanda_regioes[r]])
+
+    print('soma desvios =', sum(desvios))
+    print('desvios =', desvios)
+    print('demanda ideal:', demanda_ideal)   
+    print('demandas =', demanda_regioes)
+
+    #print(lista_regioes)
+
+    # gera lista das regioes em ordem decrescente de demanda
+    demandas_ordem = sorted(demanda_regioes.items(),
+                            key=itemgetter(1), reverse=True)
+    regioes_demanda = [demandas_ordem[r][0] for r in range(k)]
+
+    #menor_distancia = min(matriz_distancias[v])
+    #r = matriz_distancias[v].index(menor_distancia)
+    #lista_regioes[r][v] = menor_distancia
 
     
-    '''
     #teste
     # lista de dicts com v em ordem decrescente de distancia 
-    vertices_distantes = []
+    #vertices_distantes = []
     for r in range(k):
-        vertices_distantes.append(OrderedDict(sorted(regioes[r].items(),
-                                              key=itemgetter(1),
-                                              reverse=True)))
+        vertices_distantes = [sorted(lista_regioes[r].items(), reverse=True,
+                               key=lambda v: v[1]) for r in range(k)]
+    
     #pprint(vertices_distantes)
+
+    # trocar v para 2a regiao mais proxima nao funciona bem
+    #tentar trocar v para regiao mais proxima caso não esteja nela
+
     '''
+    i = 0
+    desvios_anteriores = [float('inf') for r in range(k)]
+    #while abs(sum(desvios) - sum(desvios_anteriores)) > tolerancia:
+    for n in range(10):
+        # itera regioes partindo da maior demanda
+        for r in regioes_demanda:
+            # i-esimo v mais distante de r
+            v = vertices_distantes[r][i][0]
+            # encontra o 2a regiao mais proxima de v 
+            distancia = min(matriz_distancias[v][d] for d in range(k) if d != r)
+            r_proxima = matriz_distancias[v].index(distancia)
+            print(r, v, r_proxima, distancia)
+            # troca v de regiao
+            del lista_regioes[r][v]
+            lista_regioes[r_proxima][v] = distancia
+            # recalcula demanda e desvio
+            Gr = G.subgraph(lista_regioes[r].keys())
+            demanda_regioes[r] = calcula_demanda(Gr)
+            desvios_anteriores[r] = desvios[r]
+            desvios[r] = stdev([demanda_ideal, demanda_regioes[r]])
+        i += 1
 
-    # desvios_anteriores = [float('inf') for r in range(k)]
-    #desvios_anteriores[r] = desvios[r]
-
-    # while abs(sum(desvios) - sum(desvios_anteriores)) > tolerancia:
-    # tenta troca de v para regiao do 2o centro mais proximo
-
+    print('soma desvios =', sum(desvios))
+    print('desvios:', desvios)
+    print('demandas', demanda_regioes)
+    print(i, 'iterações')
+    '''
 
     # escreve as regiões definitivas nos vértices (para plotar)
     for r in range(k):
