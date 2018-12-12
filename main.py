@@ -43,8 +43,9 @@ def main():
             x, y, v = [float(valor) for valor in dados_cliente[:3]]
             p, n = [int(valor) for valor in dados_cliente[3:]]
             G.add_node(i, x=x, y=y, volume=v, valor=p, quantidade=n)
+        # instancia e lê os dados dos veiculos
         veiculos = {}
-        for tipo in ('van', 'minivan', 'carro', 'moto', 'terceirizado'):
+        for tipo in zip(('van', 'minivan', 'carro', 'moto', 'terceirizado'), range(tipo_veiculos)):
             veiculo = arquivo.readline()
             dados_veiculo = veiculo.split()
             V = float(dados_veiculo[0])
@@ -52,13 +53,18 @@ def main():
             tc, td = [float(valor) for valor in dados_veiculo[5:7]]
             ph, pkm, pf = [int(valor) for valor in dados_veiculo[7:]]
             veiculos[tipo] = Veiculo(V, P, Nv, vf, vd, tc, td, ph, pkm, pf)
+    # fim do arquivo
 
-    # divide G em regiões
+
+    # 1a etapa: divide G em regiões
     kcluster(G, numero_regioes)
     #print(G.nodes.data())
-    custos = [veiculos[tipo].custo_dia() for tipo in veiculos.keys()]
+
+    # 2a etapa: em andamento...
+    custos = [veiculos[tipo].custo_dia(horas_dia=carga_horaria) for tipo in veiculos.keys()]
     print('custos', custos)
-    
+
+
     # desenho do grafo:
     tamanho_imagem = (5, 5)  # em polegadas, deve ter proporção 1:1
     resolucao = 150

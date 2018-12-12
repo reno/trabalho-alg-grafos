@@ -1,4 +1,18 @@
+
+'''
+GCC2018 Algoritmos em Grafos - Trabalho final
+roteirizacao.py
+
+Alunos: 
+Heuller Silva, João Pedro Andolpho, Luiz Carlos Conde,
+Gabriel Amorim, Renan Modenese e Victor Landin
+'''
+
+import networkx as nx
+from networkx import MultiGraph
 import random
+from statistics import mean, stdev
+from pprint import pprint
 
 class Veiculo:
     def __init__(self, V, P, Nv, vf, vd, tc, td, ph, pkm, pf):

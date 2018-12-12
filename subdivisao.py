@@ -1,6 +1,7 @@
+
 '''
 GCC2018 Algoritmos em Grafos - Trabalho final
-kcluster.py
+subdivisao.py
 
 Alunos: 
 Heuller Silva, João Pedro Andolpho, Luiz Carlos Conde,
