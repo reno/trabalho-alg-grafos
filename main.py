@@ -56,8 +56,7 @@ def main():
     # fim do arquivo
 
     # 1a etapa: divide G em regiões
-    regioes = k_regioes(G, numero_regioes)
-    #print(G.nodes.data())
+    subdivisao(G, numero_regioes)
 
     # 2a etapa: em andamento...
     #custos = [veiculos[tipo].custo_dia(horas_dia=carga_horaria) for tipo in veiculos.keys()]

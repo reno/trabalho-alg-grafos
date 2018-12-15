@@ -57,7 +57,7 @@ def subdivisao(G, k):
         r = demandas.index(min(demandas))
         # obtem vértice mais próximo do centro de r
         v = obter_vertice(G, nao_alocados, matrizes_ordenadas, r)
-        print('Alocando {} em {}'.format(v, r))
+        #print('Alocando {} em {}'.format(v, r))
         # soma demanda do vértice a demanda da região
         demandas[r] += demanda_vertice(G, v)
         # aloca vertice na regiao r e remove dos não alocados
