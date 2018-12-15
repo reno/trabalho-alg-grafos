@@ -56,14 +56,14 @@ def main():
     # fim do arquivo
 
     # 1a etapa: divide G em regiões
-    regioes = divide_regioes(G, numero_regioes)
+    regioes = k_regioes(G, numero_regioes)
     #print(G.nodes.data())
 
     # 2a etapa: em andamento...
-    custos = [veiculos[tipo].custo_dia(horas_dia=carga_horaria) for tipo in veiculos.keys()]
-    print('custos', custos)
+    #custos = [veiculos[tipo].custo_dia(horas_dia=carga_horaria) for tipo in veiculos.keys()]
+    #print('custos', custos)
 
-    roteiro(G, regioes, 0, veiculos['van'])
+    #roteiro(G, regioes, 0, veiculos['van'])
 
     # desenho do grafo:
     tamanho_imagem = (5, 5)  # em polegadas, deve ter proporção 1:1
