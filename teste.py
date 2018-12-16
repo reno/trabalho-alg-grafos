@@ -9,7 +9,7 @@ Gabriel Amorim, Renan Modenese e Victor Landin
 Chama gerador_instancias.py e passa arquivo resultante para main.py,
 repetindo o processo n vezes. 
 
-exemplo de uso: python3 teste.py n
+exemplo de uso: python3 n
 '''
 
 from argparse import ArgumentParser

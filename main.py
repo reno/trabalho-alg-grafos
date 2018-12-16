@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 from pprint import pprint
 from argparse import ArgumentParser
 from subdivisao import *
+from subdivisao_alt import *
 from roteirizacao import *
 
 def main():
@@ -56,8 +57,8 @@ def main():
     # fim do arquivo
 
     # 1a etapa: divide G em regiões
-    regioes = subdivisao(G, numero_regioes)
-    print(regioes)
+    #regioes = subdivisao(G, numero_regioes)
+    regioes = subdivisao_alt(G, numero_regioes)
 
     # 2a etapa: em andamento...
     #custos = [veiculos[tipo].custo_dia(horas_dia=carga_horaria) for tipo in veiculos.keys()]
